@@ -1,20 +1,13 @@
-import sys
-sys.path.insert(0, '/Users/kritkorns/Mike/Jacob/x_others/03_delfine_Django/delfine_UI/utils')
-
-from dataset import loadData
-from api import getAPI
-
-from dash import html
-from dash import dcc
-from dash import Dash, dash_table
-import plotly.graph_objects as go
 import pandas as pd
+from dash import html, dcc, dash_table
 from dash.dependencies import Input, Output
 from django.conf import settings
 from django_plotly_dash import DjangoDash
-import datetime as dt
-import pathlib
-# from utils.delfine_dataset import loadData
+
+import sys
+sys.path.insert(0, f'{settings.BASE_DIR}/utils')
+from dataset import loadData
+from api import getAPI
 
 # Initialize the app
 external_css = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -210,9 +203,11 @@ def process(
 
     ####################
     # Pseudo code for table
-    ## Get data from the selected api. 
-    ## Put it to pandas DataFrame
-    ## Convert to dict('record') using df.to_dict('records') as the example below
+    ## 1. Get data from the selected api. -> data
+    ## 2. Put it to pandas DataFrame -> df = pd.DataFrame(data)
+    ## 3. Select a number of row from the top -> df = df.head(table_row)
+    ## 4. Convert to dict('record') -> api_table = df.to_dict('records')
+    ## E.g.
     api_table = data.dataAll["Mehring-power"].head(table_row).reset_index(level=0).to_dict('records')
     ####################
 

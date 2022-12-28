@@ -1,17 +1,13 @@
-import sys
-sys.path.insert(0, '/Users/kritkorns/Mike/Jacob/x_others/03_delfine_Django/delfine_UI/utils')
-
-from dataset import loadData
-
-from dash import html
-from dash import dcc
-import plotly.graph_objects as go
 import pandas as pd
+from dash import html, dcc
 from dash.dependencies import Input, Output
 from django.conf import settings
 from django_plotly_dash import DjangoDash
-import datetime as dt
+import plotly.graph_objects as go
 
+import sys
+sys.path.insert(0, f'{settings.BASE_DIR}/utils')
+from dataset import loadData
 
 # Initialize the app
 external_css = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
