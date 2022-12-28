@@ -12,7 +12,6 @@ from api import getAPI
 # Initialize the app
 external_css = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = DjangoDash('Simpletable', external_stylesheets=external_css)
-# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 data = loadData()
 data.loadDataFromDir(dirPath=f"{settings.BASE_DIR}/data/")
@@ -178,6 +177,15 @@ app.layout = html.Div(
             ),
             dash_table.DataTable(
                 id="table_show",
+                style_table={
+                    'overflowX': 'auto',
+                    'minWidth': '100%',
+                    },
+                style_cell={
+                    'textAlign': 'center',
+                    'height': 'auto',
+                    'minWidth': '50px', 'width': '50px', 'maxWidth': '50px',
+                    'whiteSpace': 'normal',},
             ),
         ]
     )
@@ -203,12 +211,18 @@ def process(
 
     ####################
     # Pseudo code for table
-    ## 1. Get data from the selected api. -> data
-    ## 2. Put it to pandas DataFrame -> df = pd.DataFrame(data)
+    ## 1. Get data from the selected api. -> api_data
+    ## 2. Put it to pandas DataFrame -> df = pd.DataFrame(api_data)
     ## 3. Select a number of row from the top -> df = df.head(table_row)
-    ## 4. Convert to dict('record') -> api_table = df.to_dict('records')
+    ## 4. Styling data
+    ##  4.1 Specify decimal places -> df = df.round(4)
+    ## 5. Convert to dict('record') -> api_table = df.to_dict('records')
     ## E.g.
-    api_table = data.dataAll["Mehring-power"].head(table_row).reset_index(level=0).to_dict('records')
+    api_data = data.dataAll["Mehring-power"].reset_index(level=0)
+    df = api_data
+    df = df.head(table_row)
+    df = df.round(decimals=4)
+    api_table = df.to_dict('records')
     ####################
 
     return [getAPI("http://localhost:8000", api_type, api_plan, api_loc, api_date), api_table]
