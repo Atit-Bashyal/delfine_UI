@@ -23,8 +23,6 @@ app = DjangoDash('Simpletable', external_stylesheets=external_css)
 
 data = loadData()
 data.loadDataFromDir(dirPath=f"{settings.BASE_DIR}/data/")
-# print(data.dataAll['merkel1-Power'].loc[dt.date(2019, 3, 1):dt.date(2019, 3, 31)])
-print(dict(data.dataAll["Mehring-power"].head()))
 
 app.layout = html.Div(
     html.Div(
@@ -36,7 +34,7 @@ app.layout = html.Div(
                 style={
                     "display": "grid",
                     "grid-template-columns": "50fr 50fr",
-                    "padding": "10px",
+                    "padding-bottom": "30px",
                 },
                 children=[
                     html.Div(
@@ -138,7 +136,7 @@ app.layout = html.Div(
                 style={
                     "display": "grid",
                     "grid-template-columns": "30fr 70fr",
-                    "padding": "10px",
+                    # "padding": "10px",
                 },
                 children=[
                     html.Label(
@@ -156,31 +154,69 @@ app.layout = html.Div(
                     ),
                 ]
             ),
-            # dash_table.DataTable(
-            #     data=dict(data.dataAll["Mehring-power"].head()),
-            #     columns=["power"],
-            #     # [{"name": i, "id": i} for i in df.columns]
-            # )
+            html.Div(
+                style={
+                    "display": "grid",
+                    "grid-template-columns": "50fr 50fr",
+                    # "padding": "10px",
+                },
+                children=[
+                    html.Label(
+                        ["Table:"],
+                        style={
+                            "font-weight": "bold",
+                            "text-align": "left",
+                        }
+                    ),
+                    # To select showing rows
+                    dcc.Dropdown(
+                        id='table_row', 
+                        options=list(range(5,101,5)),
+                        value=5,
+                        clearable=False,
+                        searchable=False,
+                        # className='div-for-dropdown',
+                        style={
+                            "display": "flex",
+                            "justify-self": "end",
+                        },
+                    ),
+                ]
+            ),
+            dash_table.DataTable(
+                id="table_show",
+            ),
         ]
     )
 )
 
 # Callback for timeseries price
 @app.callback(
-    [Output('api_forecast', 'children'),],
+    [Output('api_forecast', 'children'),
+     Output('table_show', 'data'),],
     [Input("api_typeSelecter", "value"),
      Input("api_planSelecter", "value"),
      Input("api_locSelecter", "value"),
-     Input("api_dateSelecter", "date"),],
+     Input("api_dateSelecter", "date"),
+     Input("table_row", "value"),],
 )
 def process(
     api_type,
     api_plan,
     api_loc,
-    api_date
+    api_date,
+    table_row
     ):
 
-    return [getAPI("http://localhost:8000", api_type, api_plan, api_loc, api_date)]
+    ####################
+    # Pseudo code for table
+    ## Get data from the selected api. 
+    ## Put it to pandas DataFrame
+    ## Convert to dict('record') using df.to_dict('records') as the example below
+    api_table = data.dataAll["Mehring-power"].head(table_row).reset_index(level=0).to_dict('records')
+    ####################
+
+    return [getAPI("http://localhost:8000", api_type, api_plan, api_loc, api_date), api_table]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

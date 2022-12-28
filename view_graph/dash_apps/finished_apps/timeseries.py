@@ -19,7 +19,6 @@ app = DjangoDash('Simpletimeseries', external_stylesheets=external_css)
 
 data = loadData()
 data.loadDataFromDir(dirPath=f"{settings.BASE_DIR}/data/")
-data.dataAll['merkel1-Power'].loc[dt.date(2019, 3, 1):dt.date(2019, 3, 31)]
 
 app.layout = html.Div(
     style={
