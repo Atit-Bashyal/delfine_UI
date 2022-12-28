@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('home.urls')),
-    path('view/', include('view_graph.urls')),
+    path('charts/', include('view_graph.urls')),
+    path('tables/', include('view_table.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls'))
 ]

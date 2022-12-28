@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'dpd_static_support',
     'home.apps.HomeConfig',
     'view_graph.apps.ViewGraphConfig',
+    'view_table.apps.ViewTableConfig',
     'channels',
     'channels_redis',
 
