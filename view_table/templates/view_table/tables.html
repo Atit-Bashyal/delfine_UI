@@ -1,0 +1,11 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% load plotly_dash %}
+
+    <div class="{% plotly_class name='Simpletable' %}" style="height: 100%; width: 100%">
+        {% plotly_app name='Simpletable' ratio=0.55 %}
+    </div>
+
+
+{% endblock %}
