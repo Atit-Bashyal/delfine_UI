@@ -4,8 +4,10 @@ import plotly.graph_objects as go
 
 
 # Create your views here.
-def chart(request):
-    return render(request, 'view_table/tables.html')
+def table(request):
+    return render(request, 'view_table/tables.html', )
+
+
 
 
 

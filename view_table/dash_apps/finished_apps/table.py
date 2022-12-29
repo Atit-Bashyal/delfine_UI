@@ -3,6 +3,7 @@ from dash import html, dcc, dash_table
 from dash.dependencies import Input, Output
 from django.conf import settings
 from django_plotly_dash import DjangoDash
+import urllib.parse
 
 import sys
 sys.path.insert(0, f'{settings.BASE_DIR}/utils')
@@ -15,6 +16,8 @@ app = DjangoDash('Simpletable', external_stylesheets=external_css)
 
 data = loadData()
 data.loadDataFromDir(dirPath=f"{settings.BASE_DIR}/data/")
+
+
 
 app.layout = html.Div(
     html.Div(
@@ -124,10 +127,11 @@ app.layout = html.Div(
                     ),
                 ]
             ),
+            dcc.Location(id='api_href', refresh=False),
             html.Div(
                 style={
                     "display": "grid",
-                    "grid-template-columns": "30fr 70fr",
+                    "grid-template-columns": "30fr 68fr 2fr",
                     # "padding": "10px",
                 },
                 children=[
@@ -142,6 +146,16 @@ app.layout = html.Div(
                         id="api_forecast",
                         style={
                             "text-align": "left",
+                        },
+                    ),
+                    dcc.Clipboard(
+                        target_id="api_forecast",
+                        title="copy",
+                        style={
+                            "display": "inline-block",
+                            "fontSize": 20,
+                            "verticalAlign": "center",
+                            "horizontalAlign": "middle",
                         },
                     ),
                 ]
@@ -191,6 +205,7 @@ app.layout = html.Div(
     )
 )
 
+
 # Callback for timeseries price
 @app.callback(
     [Output('api_forecast', 'children'),
@@ -199,6 +214,7 @@ app.layout = html.Div(
      Input("api_planSelecter", "value"),
      Input("api_locSelecter", "value"),
      Input("api_dateSelecter", "date"),
+     Input('api_href', 'href'),
      Input("table_row", "value"),],
 )
 def process(
@@ -206,12 +222,23 @@ def process(
     api_plan,
     api_loc,
     api_date,
-    table_row
+    api_href,
+    table_row,
+    
     ):
+    parse_url = urllib.parse.urlparse(api_href)
+    api_hostname = f"{parse_url.scheme}://{parse_url.netloc}"
+    # api_hostname = "http://localhost:8000"
 
     ####################
     # Pseudo code for table
     ## 1. Get data from the selected api. -> api_data
+    ##  E.g. for api result should be
+    ##  [{'datetime': Timestamp('2019-02-14 09:15:00'), 'power': 0.678},
+    ##   {'datetime': Timestamp('2019-02-14 09:30:00'), 'power': 0.78},
+    ##   {'datetime': Timestamp('2019-02-14 09:45:00'), 'power': 0.912},
+    ##   {'datetime': Timestamp('2019-02-14 10:00:00'), 'power': 1.025},
+    ##   {'datetime': Timestamp('2019-02-14 10:15:00'), 'power': 1.126}]
     ## 2. Put it to pandas DataFrame -> df = pd.DataFrame(api_data)
     ## 3. Select a number of row from the top -> df = df.head(table_row)
     ## 4. Styling data
@@ -225,7 +252,7 @@ def process(
     api_table = df.to_dict('records')
     ####################
 
-    return [getAPI("http://localhost:8000", api_type, api_plan, api_loc, api_date), api_table]
+    return [getAPI(api_hostname, api_type, api_plan, api_loc, api_date), api_table]
 
 if __name__ == '__main__':
     app.run_server(debug=True)

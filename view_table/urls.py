@@ -4,6 +4,6 @@ from django.views.generic.base import RedirectView
 from view_table.dash_apps.finished_apps import table
 
 urlpatterns = [
-    path('', views.chart, name='table'),
+    path('', views.table, name='table'),
     path('admin', RedirectView.as_view(url='/admin')),
     path('home', RedirectView.as_view(url=' '))]
