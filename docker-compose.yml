@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  delfine:
+    container_name: delfine_app
+    image: delfine:latest
+    ports:
+      - "8000:8000"
+    restart: always
