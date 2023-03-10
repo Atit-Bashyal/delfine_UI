@@ -125,6 +125,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
 CRISPY_TEMPLATE_PACK = 'bootstap4'
 
 ASGI_APPLICATION = 'plotly_django_tutorial.routing.application'
