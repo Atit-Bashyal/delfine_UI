@@ -92,7 +92,7 @@ app.layout = html.Div(
                             ),
                             dcc.Dropdown(
                                 id='api_locSelecter', 
-                                options=["location1", "location2", "location3"],  # Need to change to city name
+                                options=["merkel", "mehring"],  # Need to change to city name
                                 placeholder="Select a location",
                                 # className='div-for-dropdown',
                             ),

@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'view_graph.apps.ViewGraphConfig',
     'view_table.apps.ViewTableConfig',
+    'indeed.apps.IndeedConfig',
+    'django_apscheduler',
+    'fetchforecast.apps.IndeedmodelsConfig',
     'channels',
     'channels_redis',
 
@@ -171,3 +174,4 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SCHEDULER_AUTOSTART = True

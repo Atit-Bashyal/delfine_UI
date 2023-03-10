@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('home.urls')),
     path('charts/', include('view_graph.urls')),
     path('tables/', include('view_table.urls')),
+    path('fetch_forecast/',include('fetchforecast.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls'))
 ]
