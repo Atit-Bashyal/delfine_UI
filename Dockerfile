@@ -11,6 +11,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip
 
 RUN pip install -r requirements.txt
 
+RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
 
 # execute command "python3 manage.py runserver 0.0.0.0:8000" when container starts
