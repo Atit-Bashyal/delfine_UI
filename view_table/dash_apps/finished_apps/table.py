@@ -32,28 +32,28 @@ app.layout = html.Div(
                     "padding-bottom": "30px",
                 },
                 children=[
-                    # html.Div(
-                    #     style={
-                    #         "display": "grid",
-                    #         "grid-template-columns": "30fr 70fr",
-                    #         "width": "50%",
-                    #     },
-                    #     children=[
-                    #         html.Label(
-                    #             ["Type:"], 
-                    #             style={
-                    #                 "font-weight": "bold",
-                    #                 "text-align": "left",
-                    #             },
-                    #         ),
-                    #         dcc.Dropdown(
-                    #             id='api_typeSelecter', 
-                    #             options=["wind", "solar"],
-                    #             placeholder="Select a type",
-                    #             # className='div-for-dropdown',
-                    #         ),
-                    #     ]
-                    # ),
+                    html.Div(
+                        style={
+                            "display": "grid",
+                            "grid-template-columns": "30fr 70fr",
+                            "width": "50%",
+                        },
+                        children=[
+                            html.Label(
+                                ["Type:"], 
+                                style={
+                                    "font-weight": "bold",
+                                    "text-align": "left",
+                                },
+                            ),
+                            dcc.Dropdown(
+                                id='api_typeSelecter', 
+                                options=["wind", "solar"],
+                                placeholder="Select a type",
+                                # className='div-for-dropdown',
+                            ),
+                        ]
+                    ),
                     html.Div(
                         style={
                             "display": "grid",
@@ -210,13 +210,15 @@ app.layout = html.Div(
 @app.callback(
     [Output('api_forecast', 'children'),
      Output('table_show', 'data'),],
-    [Input("api_planSelecter", "value"),
+    [Input("api_typeSelecter", "value"),
+     Input("api_planSelecter", "value"),
      Input("api_locSelecter", "value"),
      Input("api_dateSelecter", "date"),
      Input('api_href', 'href'),
      Input("table_row", "value"),],
 )
 def process(
+    api_type,
     api_plan,
     api_loc,
     api_date,
@@ -250,7 +252,7 @@ def process(
     api_table = df.to_dict('records')
     ####################
 
-    return [getAPI(api_hostname, api_plan, api_loc, api_date), api_table]
+    return [getAPI(api_hostname, api_type, api_plan, api_loc, api_date), api_table]
 
 if __name__ == '__main__':
     app.run_server(debug=True)
